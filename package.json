@@ -1,0 +1,19 @@
+{
+  "name": "community-safety",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Nathanael McDaniel <nmcdaniel@fastmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/postgres": "^0.4.1",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "firebase": "^10.3.0",
+    "firebase-functions": "^4.4.1"
+  }
+}
