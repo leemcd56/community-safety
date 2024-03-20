@@ -18,7 +18,7 @@ module.exports = async function (guild) {
 
             console.log(`Checking ${bannedMembers.length} banned members against guild ${guild.id}`)
 
-            guild.members.fetch({ user: bannedMembers })
+            await guild.members.fetch({ user: bannedMembers })
                 .then((pending) => {
                     console.log(`Found ${pending.size} banned members on this round`)
 

@@ -1,5 +1,6 @@
-const { Events } = require('discord.js')
+const { Events, PermissionsBitField } = require('discord.js')
 const checkBans = require('../helpers/checkBans.js')
+const channelTypes = require('../helpers/channelTypes.js')
 
 module.exports = {
     name: Events.GuildAvailable,
@@ -7,21 +8,24 @@ module.exports = {
     async execute(guild) {
         try {
             const bannedMembers = await checkBans(guild)
-            const systemChannel = guild.systemChannelId
+            const systemChannelId = guild.systemChannelId
 
-            console.log(`Found ${bannedMembers.length} banned members in ${guild.id}`, bannedMembers)
+            console.log(`Found ${bannedMembers.length} banned members in ${guild.id}`)
 
-            bannedMembers.forEach((bannedMember) => {
-                guild.channels.cache.fetch(systemChannel)
-                    .then((channel) => {
-                        if (channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES')) {
-                            channel.send({
-                                content: `<@${bannedMember}>, who is in your server, has been banned in another server.`,
-                            })
-                        }
+            if (systemChannelId && bannedMembers.length > 0) {
+                const systemChannel = await guild.channels.cache.get(guild.systemChannelId)
+
+                console.log(`System channel ID: ${systemChannelId}`)
+                console.log(`System channel type: ${systemChannel.type}`)
+
+                //if (systemChannel.type === channelTypes.GUILD_TEXT && systemChannel.permissionsFor(guild.me)?.has(PermissionsBitField.Flags.SendMessages)) {
+                    bannedMembers.forEach((bannedMember) => {
+                        systemChannel.send({
+                            content: `<@${bannedMember}>, who is in your server, has been banned in another server.`,
+                        })
                     })
-                    .catch(console.error)
-            })
+                //}
+            }
         } catch (error) {
             console.error('[guildCreate] An unexpected error occurred: ', error)
         }
